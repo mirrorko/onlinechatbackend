@@ -14,6 +14,8 @@ import { Users } from './models/user'
 
 const app = express()
 const server = http.Server(app)
+
+const PORT = process.env.PORT || 2266
 // const server = https.Server(
 //   {
 //     requestCert: false,
@@ -232,6 +234,4 @@ io.on('connection', function(socket) {
   })
 })
 app.use('/api', router)
-server.listen(2266, function() {
-  console.log('listening on *:2266')
-})
+server.listen(PORT)
