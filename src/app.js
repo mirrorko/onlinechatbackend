@@ -15,7 +15,7 @@ import { Users } from './models/user'
 const app = express()
 const server = http.Server(app)
 
-const PORT = process.env.PORT || 2266
+const PORT = process.env.PORT || 5000
 // const server = https.Server(
 //   {
 //     requestCert: false,
