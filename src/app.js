@@ -6,8 +6,6 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 
 import session from 'express-session'
-import passport from 'passport'
-import Strategy from 'passport-facebook'
 
 import { Messages } from './models/messages'
 import { Users } from './models/user'
@@ -15,7 +13,7 @@ import { Users } from './models/user'
 const app = express()
 const server = http.Server(app)
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 2266
 // const server = https.Server(
 //   {
 //     requestCert: false,
@@ -38,31 +36,6 @@ const corsOptions = {
   },
 }
 
-passport.use(
-  new Strategy.Strategy(
-    {
-      clientID: '365386727348805',
-      clientSecret: '58270229edfe2c4bb089210bdd40ac3e',
-      callbackURL: '/return',
-    },
-    function(accessToken, refreshToken, profile, cb) {
-      // In this example, the user's Facebook profile is supplied as the user
-      // record.  In a production-quality application, the Facebook profile should
-      // be associated with a user record in the application's database, which
-      // allows for account linking and authentication with other identity
-      // providers.
-      return cb(null, profile)
-    },
-  ),
-)
-
-passport.serializeUser(function(user, cb) {
-  cb(null, user)
-})
-
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj)
-})
 app.use(
   session({
     secret: 'keyboard cat',
@@ -72,27 +45,16 @@ app.use(
   }),
 )
 
-app.use(passport.initialize())
-app.use(passport.session())
 app.use(cors(corsOptions))
 mongoose.connect(
   'mongodb://localhost:27017',
+  // 'mongodb://localhost:27017',
   // { useNewUrlParser: true },
 )
 
 app.get('/login', function(req, res) {
   res.render('login')
 })
-
-app.get('/login/facebook', passport.authenticate('facebook'))
-
-app.get(
-  '/return',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/')
-  },
-)
 
 app.get('/', function(req, res, next) {
   if (req.session.views) {

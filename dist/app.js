@@ -12,10 +12,6 @@ var _cors = _interopRequireDefault(require("cors"));
 
 var _expressSession = _interopRequireDefault(require("express-session"));
 
-var _passport = _interopRequireDefault(require("passport"));
-
-var _passportFacebook = _interopRequireDefault(require("passport-facebook"));
-
 var _messages = require("./models/messages");
 
 var _user = require("./models/user");
@@ -27,7 +23,7 @@ var app = (0, _express.default)();
 
 var server = _http.default.Server(app);
 
-var PORT = process.env.PORT || 5000; // const server = https.Server(
+var PORT = process.env.PORT || 2266; // const server = https.Server(
 //   {
 //     requestCert: false,
 //     rejectUnauthorized: false,
@@ -49,28 +45,6 @@ var corsOptions = {
     // }
   }
 };
-
-_passport.default.use(new _passportFacebook.default.Strategy({
-  clientID: '365386727348805',
-  clientSecret: '58270229edfe2c4bb089210bdd40ac3e',
-  callbackURL: '/return'
-}, function (accessToken, refreshToken, profile, cb) {
-  // In this example, the user's Facebook profile is supplied as the user
-  // record.  In a production-quality application, the Facebook profile should
-  // be associated with a user record in the application's database, which
-  // allows for account linking and authentication with other identity
-  // providers.
-  return cb(null, profile);
-}));
-
-_passport.default.serializeUser(function (user, cb) {
-  cb(null, user);
-});
-
-_passport.default.deserializeUser(function (obj, cb) {
-  cb(null, obj);
-});
-
 app.use((0, _expressSession.default)({
   secret: 'keyboard cat',
   resave: true,
@@ -79,21 +53,14 @@ app.use((0, _expressSession.default)({
     maxAge: 60000
   }
 }));
-app.use(_passport.default.initialize());
-app.use(_passport.default.session());
 app.use((0, _cors.default)(corsOptions));
 
-_mongoose.default.connect('mongodb://localhost:27017' // { useNewUrlParser: true },
+_mongoose.default.connect('mongodb://localhost:27017' // 'mongodb://localhost:27017',
+// { useNewUrlParser: true },
 );
 
 app.get('/login', function (req, res) {
   res.render('login');
-});
-app.get('/login/facebook', _passport.default.authenticate('facebook'));
-app.get('/return', _passport.default.authenticate('facebook', {
-  failureRedirect: '/login'
-}), function (req, res) {
-  res.redirect('/');
 });
 app.get('/', function (req, res, next) {
   if (req.session.views) {
