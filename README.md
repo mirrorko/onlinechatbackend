@@ -1,15 +1,28 @@
 # onlinechatbackend
 
 This project was developed with Node.js and Express.js
+You can use facebook to login and chat with yourself.
 
-if you wanted open onlinechat , plz confirm you also clone [onlinechat](https://github.com/mirrorko/onlinechat).
+## Prerequisite
+
+If you want to launch this online chat, please install [onlinechat](https://github.com/mirrorko/onlinechat) first.
 
 ## How to run this project
 
-clone this repository
+1. Clone this repository
 
-and install the package
+```
+$ git clone git@github.com:mirrorko/onlinechatbackend.git
+```
 
-In the project directory, you can run:
+2. Install dependency packages
 
-### `npm start`
+```
+$ npm i
+```
+
+## Launching online chat
+
+```
+$ npm start
+```
